@@ -1,0 +1,637 @@
+axios.defaults.headers.common[
+  "Authorization"
+] = `Bearer ${token}`;
+
+
+
+
+while updating user permission we will have to change give new role if there are multiple user
+or we will have to change role permission for all 
+
+
+
+
+Company ✅
+RBAC ✅
+
+Employee
+ClientCompany
+EmployeeDocument
+
+Driver
+Vehicle
+Shift
+
+Attendance
+Trip
+
+WageConfiguration
+
+Payroll (later)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Tours & Travels HRMS - Requirements & System Design (Draft V1)
+
+## Project Overview
+
+An offline-first HRMS system for a Tours & Travels company.
+
+Primary goals:
+
+* Employee Management
+* Driver Management
+* Attendance Management
+* Document/KYC Management
+* Vehicle Assignment
+* Shift Management
+* Client Company Management
+* Salary & Wage Management
+* Advance Payment Management
+* Payroll (Future Phase)
+* Backup & Restore
+
+---
+
+# Completed Modules
+
+## Company
+
+Store company information:
+
+* Company Name
+* Owner Name
+* Phone
+* Email
+* Address
+* GST Number
+* PAN Number
+* Logo
+* Bank Details
+
+### Bank Details
+
+* Bank Name
+* Account Holder Name
+* Account Number
+* IFSC Code
+
+### Logo Upload
+
+* Image uploaded using Multer
+* Stored in uploads folder
+* File path saved in database
+
+---
+
+## Authentication & RBAC
+
+### User
+
+* Username
+* Password
+
+### Role
+
+Examples:
+
+* Admin
+* HR
+* Manager
+* User
+
+### Permission
+
+Examples:
+
+* employee:create
+* employee:update
+* employee:read
+* employee:delete
+
+### Role Permission Mapping
+
+Many-to-many mapping between:
+
+* Role
+* Permission
+
+---
+
+# Planned Modules
+
+## Employee
+
+Employee is the master entity.
+
+Everything else depends on Employee.
+
+### Employee Details
+
+* Employee Code
+* First Name
+* Last Name
+* Phone
+* Alternate Phone
+* Email
+* Date of Birth
+* Joining Date
+* Designation
+* Employee Type
+* Status
+* Address
+* Emergency Contact
+* Photo
+
+### PF Information
+
+* PF Enabled
+* PF Wage
+* UAN Number
+
+### Client Assignment
+
+Employee may work for:
+
+* Adani
+* Reliance
+* Airport Authority
+* Tata Motors
+
+etc.
+
+---
+
+## Client Company
+
+Store companies where drivers are deployed.
+
+### Fields
+
+* Company Name
+* Contact Person
+* Phone
+* Address
+* Active Status
+
+---
+
+## Driver
+
+Driver-specific information.
+
+### Fields
+
+* License Number
+* License Expiry
+* Badge Number
+* Badge Expiry
+* Experience Years
+
+Driver is linked to Employee.
+
+Not every employee is a driver.
+
+---
+
+## Employee Documents
+
+Store employee KYC and compliance documents.
+
+### Supported Documents
+
+* Aadhaar
+* PAN
+* Driving License
+* Photo
+* Other Documents
+* Advance salary payments(Voucher)
+
+### Document Fields
+
+* Document Type
+* Document Number
+* File Path
+* Expiry Date
+* Remarks
+
+---
+
+## Smart Document Feature
+
+Future Enhancement:
+
+When user uploads:
+
+* PDF
+* Image
+
+System should:
+
+1. Extract text using OCR
+2. Detect expiry date
+3. Save expiry date automatically
+4. Allow user verification
+
+Examples:
+
+* Driving License
+* Medical Certificate
+* Vehicle Insurance
+* Permit
+
+---
+
+## Vehicle
+
+Store vehicle information.
+
+### Fields
+
+* Vehicle Number
+* Vehicle Type
+* Make
+* Model
+* Status
+
+Examples:
+
+* Bus
+* Car
+* SUV
+* Traveller
+
+---
+
+## Shift
+
+Company currently uses approximately 5 shifts.
+
+### Fields
+
+* Shift Name
+* Start Time
+* End Time
+
+Examples:
+
+* Shift A
+* Shift B
+* Shift C
+* Shift D
+* Shift E
+
+---
+
+## Attendance
+
+Attendance should capture:
+
+* Employee
+* Date
+* Status
+* Shift
+* Vehicle Assigned
+* Check-In Time
+* Check-Out Time
+* Remarks
+
+### Status Values
+
+* PRESENT
+* ABSENT
+* LEAVE
+* HALF_DAY
+* ON_TRIP
+* HOLIDAY
+
+### Rules
+
+One attendance per employee per date.
+
+---
+
+## Trip
+
+Trip should be separate from Attendance.
+
+### Fields
+
+* Driver
+* Vehicle
+* Start Date
+* End Date
+* Pickup Location
+* Drop Location
+* Status
+
+Purpose:
+
+* Multi-day trip tracking
+* Vehicle allocation
+* Driver allocation
+
+---
+
+# Salary System (Current Understanding)
+
+This section needs validation from client.
+
+## Wage Rate
+
+Company uses daily wage rate.
+
+Example:
+
+₹700/day
+
+Salary Calculation:
+
+Wage Rate × Payable Days
+
+Example:
+
+₹700 × 26 days
+
+= ₹18,200
+
+---
+
+## Higher Than Minimum Wage
+
+Company may pay more than minimum wage.
+
+Example:
+
+Minimum Wage = ₹700/day
+
+Actual Wage = ₹800/day
+
+Need clarification on terminology used.
+
+---
+
+## PF (Provident Fund)
+
+Current understanding:
+
+PF can be enabled/disabled employee-wise.
+
+Example:
+
+PF Wage = ₹15,000
+
+Employee PF:
+
+12% = ₹1,800
+
+Employer PF:
+
+12% = ₹1,800
+
+Total Contribution:
+
+₹3,600
+
+Need confirmation from client.
+
+---
+
+## Bonus
+
+Need clarification.
+
+Possible types:
+
+* Festival Bonus
+* Performance Bonus
+* Special Bonus
+
+---
+
+## Overtime
+
+Need clarification.
+
+Possible methods:
+
+### Method 1
+
+Fixed amount per hour.
+
+Example:
+
+₹150/hour
+
+### Method 2
+
+Hourly rate based.
+
+### Method 3
+
+Double-rate calculation.
+
+Need actual company process.
+
+---
+
+## Salary Increment
+
+Must maintain history.
+
+Never overwrite salary.
+
+Example:
+
+01-Jan-2026 → ₹700/day
+
+01-Jul-2026 → ₹750/day
+
+01-Jan-2027 → ₹800/day
+
+System should calculate salary according to revision effective date.
+
+---
+
+# Advance Payment Module
+
+Important Requirement
+
+Employees may take advance payments.
+
+### Process
+
+Employee requests advance
+
+↓
+
+Advance Voucher Generated
+
+↓
+
+Employee Signature
+
+↓
+
+Approval
+
+↓
+
+Payment
+
+↓
+
+Recovery in Salary
+
+### Data Required
+
+* Employee
+* Amount
+* Date
+* Reason
+* Voucher File
+* Signature
+* Approval Status
+* Remarks
+
+### Future Payroll Integration
+
+Salary
+
+* Advance Amount
+
+=
+
+Net Payable
+
+---
+
+# Payroll (Future Phase)
+
+Payroll should be built only after obtaining:
+
+* Salary Slips
+* PF Calculation Rules
+* Attendance Register
+* Overtime Rules
+* Bonus Rules
+
+Expected Payroll Formula:
+
+Gross Salary
+
+* Bonus
+
+* Overtime
+
+* Allowances
+
+- PF
+
+- Advance Recovery
+
+- Other Deductions
+
+=
+
+Net Salary
+
+---
+
+# Backup Strategy
+
+System is offline-first.
+
+Backup should include:
+
+1. SQLite Database
+2. Uploads Folder
+
+### Backup Structure
+
+backup.zip
+
+Contains:
+
+* Database
+* Employee Documents
+* Company Logo
+* Uploaded Files
+
+---
+
+# Pending Questions for Client
+
+1. Salary calculation process
+2. Minimum wage logic
+3. PF calculation process
+4. PF percentage
+5. PF optional or mandatory
+6. Overtime calculation
+7. Bonus structure
+8. Salary increment process
+9. Shift timings
+10. Client company assignment rules
+11. Required document list
+12. Expiry alert requirements
+13. Advance payment process
+14. Advance recovery process
+15. Salary slip samples
+16. Attendance sheet sample
+
+---
+
+# Development Order
+
+Phase 1
+
+* Employee
+* Employee Document
+* Driver
+
+Phase 2
+
+* Client Company
+* Vehicle
+* Shift
+
+Phase 3
+
+* Attendance
+* Trip
+
+Phase 4
+
+* Salary Revision
+* Advance Payment
+
+Phase 5
+
+* Payroll
+
+Phase 6
+
+* Reports
+* Dashboard
+* Alerts
+* Analytics
+
