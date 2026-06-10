@@ -23,16 +23,13 @@ import Designations from "./pages/Designations";
 import EmploymentTypes from "./pages/EmploymentTypes";
 import PaymentMethods from "./pages/PaymentMethods";
 import Vehicles from "./pages/Vehicles";
-import CreateVehicle from "./pages/CreateVehicle"
+import CreateVehicle from "./pages/CreateVehicle";
 import EditVehicle from "./pages/EditVehicle";
 import Employees from "./pages/Employees";
 import CreateEmployee from "./pages/CreateEmployee";
 import EditEmployee from "./pages/EditEmployees";
-import ViewEmployee from "./pages/ViewEmployee"
-
-
-
-
+import ViewEmployee from "./pages/ViewEmployee";
+import EmployeeDocuments  from "./pages/EmployeeDocuments"
 function App() {
   return (
     <BrowserRouter>
@@ -246,9 +243,6 @@ function App() {
           <Route index element={<PaymentMethods />} />
         </Route>
 
-
-
-
         <Route
           path="/settings/master-data/vehicles"
           element={
@@ -260,9 +254,7 @@ function App() {
           <Route index element={<Vehicles />} />
         </Route>
 
-
-
-<Route
+        <Route
           path="/settings/master-data/vehicles/create"
           element={
             <ProtectedRoute>
@@ -313,7 +305,7 @@ function App() {
         >
           <Route index element={<EditEmployee />} />
         </Route>
-          <Route
+        <Route
           path="/employees/:id/"
           element={
             <ProtectedRoute>
@@ -322,6 +314,16 @@ function App() {
           }
         >
           <Route index element={<ViewEmployee />} />
+        </Route>
+        <Route
+          path="/employees/:id/documents"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmployeeDocuments  />} />
         </Route>
       </Routes>
     </BrowserRouter>

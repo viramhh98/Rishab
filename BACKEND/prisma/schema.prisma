@@ -7,8 +7,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-
 enum EmployeeStatus {
   ACTIVE
   RESIGNED
@@ -38,14 +36,12 @@ enum AdvanceDeductionStatus {
 
 enum DocumentType {
   PAN_CARD
-  AADHAAR_FRONT
-  AADHAAR_BACK
+  AADHAAR_CARD
   DRIVING_LICENSE
-  RESUME
-  OFFER_LETTER
-  EXPERIENCE_LETTER
   BANK_PASSBOOK
+  PHOTO
   OTHER
+  
 }
 
 model Department {
@@ -187,10 +183,14 @@ model EmployeeDocument {
 
   documentType DocumentType
 
+  documentName String?
+
   filePath String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([employeeId])
 }
 
 model Attendance {

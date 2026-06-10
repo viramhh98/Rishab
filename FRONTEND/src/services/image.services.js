@@ -3,14 +3,19 @@ class FileService {
     this.baseUrl = import.meta.env.VITE_API_BASE_URL;
   }
 
-  getFileUrl(filePath) {
-    if (!filePath) return null;
+ getFileUrl(filePath) {
+  if (!filePath) return null;
 
-    return `${this.baseUrl}${filePath.replace(
-      "../STROAGE_BACKUP/UPLOADS",
-      "/uploads"
-    )}`;
-  }
+  const normalizedPath =
+    filePath
+      .replaceAll("\\", "/")
+      .replace(
+        "../STROAGE_BACKUP/UPLOADS",
+        "/uploads"
+      );
+
+  return `${this.baseUrl}${normalizedPath}`;
+}
 
   getImageUrl(filePath) {
     return this.getFileUrl(filePath);
