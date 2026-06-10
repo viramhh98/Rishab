@@ -1,0 +1,445 @@
+# HRMS Backend MCP (Master Context & Plan)
+
+## Current Project
+
+Tech Stack:
+
+* Node.js
+* Express
+* Prisma ORM
+* SQLite (Current)
+* JWT Authentication
+* RBAC (Role Based Access Control)
+
+Existing Modules:
+
+✅ User Management
+
+* User
+* Role
+* Permission
+* RolePermission
+
+✅ Company Management
+
+* Company
+
+---
+
+# New HRMS Modules Finalized
+
+## Masters
+
+### Department
+
+Purpose:
+
+Employee department classification.
+
+Examples:
+
+* HR
+* Accounts
+* Operations
+* Sales
+
+CRUD Required:
+
+* Create Department
+* Update Department
+* Delete Department
+* List Departments
+* Department Details
+
+---
+
+### Designation
+
+Purpose:
+
+Employee designation.
+
+Examples:
+
+* Driver
+* Manager
+* Accountant
+* Cleaner
+
+CRUD Required.
+
+---
+
+### Employment Type
+
+Purpose:
+
+Employment category.
+
+Examples:
+
+* Permanent
+* Contract
+* Intern
+
+CRUD Required.
+
+---
+
+### Payment Method
+
+Purpose:
+
+Advance payment tracking.
+
+Examples:
+
+* Cash
+* UPI
+* Bank Transfer
+* Cheque
+
+CRUD Required.
+
+---
+
+## Vehicle Management
+
+Purpose:
+
+Tours & Travels vehicle master.
+
+Fields:
+
+* Vehicle Number
+* Vehicle Name
+* Vehicle Type
+* Registration No
+* Seating Capacity
+* Active Status
+
+CRUD Required.
+
+---
+
+## Employee Management
+
+Purpose:
+
+Main employee records.
+
+Store:
+
+### Basic
+
+* Employee Code
+* First Name
+* Last Name
+* Phone
+* Email
+* Gender
+* DOB
+* Joining Date
+* Profile Photo
+
+### Organization
+
+* Company
+* Department
+* Designation
+* Employment Type
+
+### KYC
+
+* PAN
+* Aadhaar
+* Driving License
+
+### Bank
+
+* Bank Name
+* Account Holder
+* Account Number
+* IFSC
+
+### Salary
+
+* Joining Salary
+* Current Salary
+* Basic
+* HRA
+* DA
+
+### PF
+
+* PF Enabled
+* PF %
+* PF Salary Limit
+
+### PT
+
+* PT Applicable
+* PT Amount
+
+### ESIC
+
+* ESIC Applicable
+
+### Status
+
+* Active
+* Resigned
+* Terminated
+* Notice Period
+
+Required APIs:
+
+* Create Employee
+* Update Employee
+* Employee Detail
+* Employee List
+* Activate Employee
+* Deactivate Employee
+
+---
+
+## Employee Documents
+
+Purpose:
+
+Employee document storage.
+
+Document Types:
+
+* PAN
+* Aadhaar Front
+* Aadhaar Back
+* Driving License
+* Resume
+* Offer Letter
+* Experience Letter
+* Bank Passbook
+* Other
+
+Required APIs:
+
+* Upload Document
+* Delete Document
+* Employee Documents List
+
+Files stored on disk.
+Only file path stored in DB.
+
+---
+
+## Attendance Management
+
+Purpose:
+
+Daily attendance.
+
+Fields:
+
+* Employee
+* Date
+* Status
+* Vehicle
+* Overtime Hours
+* Overtime Remarks
+* Remarks
+
+Attendance Status:
+
+* Present
+* Absent
+* Half Day
+* Leave
+* Holiday
+
+Required APIs:
+
+* Mark Attendance
+* Bulk Attendance
+* Attendance List
+* Attendance Report
+* Monthly Attendance Summary
+
+Business Rule:
+
+One attendance per employee per day.
+
+---
+
+## Salary Revision
+
+Purpose:
+
+Maintain salary history.
+
+Store:
+
+* Previous Salary
+* Revised Salary
+* Effective Date
+* Basic
+* HRA
+* DA
+* PF Configuration
+* PT Configuration
+* ESIC Configuration
+* Reason
+* Remarks
+* Updated By
+
+Required APIs:
+
+* Create Salary Revision
+* Salary Revision History
+
+Business Rule:
+
+When revision created:
+
+1. Create SalaryRevision
+2. Update Employee.currentSalary
+
+Inside transaction.
+
+---
+
+## Employee Advance
+
+Purpose:
+
+Salary advances.
+
+Store:
+
+* Employee
+* Date
+* Amount
+* Reason
+* Payment Method
+* Voucher Number
+* Voucher File
+* Remarks
+
+Deduction:
+
+* Pending
+* Deducted
+
+Required APIs:
+
+* Create Advance
+* Advance List
+* Mark Deducted
+
+---
+
+## Payroll
+
+### Payroll Run
+
+Store:
+
+* Company
+* Month
+* Year
+* Status
+
+Status:
+
+* Draft
+* Processing
+* Completed
+* Cancelled
+
+### Employee Payroll
+
+Store:
+
+* Working Days
+* Present Days
+* Overtime Hours
+* Basic
+* HRA
+* DA
+* Gross Salary
+* PF
+* PT
+* ESIC
+* Advance Deduction
+* Net Salary
+
+Required APIs:
+
+* Generate Payroll
+* Payroll Details
+* Payroll List
+* Payslip Data
+
+---
+
+# API Development Order
+
+Phase 1
+
+1. Department
+2. Designation
+3. Employment Type
+4. Payment Method
+5. Vehicle
+
+Phase 2
+
+6. Employee
+7. Employee Documents
+
+Phase 3
+
+8. Attendance
+9. Salary Revision
+10. Employee Advance
+
+Phase 4
+
+11. Payroll
+
+---
+
+# Folder Structure
+
+src/
+
+├── routes/
+├── controllers/
+├── services/
+├── validations/
+├── middlewares/
+├── prisma/
+├── utils/
+├── uploads/
+│
+├── modules/
+│   ├── employee/
+│   ├── attendance/
+│   ├── payroll/
+│   ├── vehicle/
+│   ├── department/
+│   ├── designation/
+│   ├── employmentType/
+│   ├── paymentMethod/
+│   ├── salaryRevision/
+│   └── employeeAdvance/
+
+Architecture:
+
+Route
+→ Controller
+→ Service
+→ Prisma
+
+Never access Prisma directly inside controllers.
+
+All business logic goes inside services.

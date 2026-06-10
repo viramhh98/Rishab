@@ -1,5 +1,4 @@
 import { Routes, Route, BrowserRouter } from "react-router-dom";
-
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
@@ -18,6 +17,20 @@ import UserManagement from "./pages/UserManagement";
 import CreateUser from "./pages/CreateUser";
 import UserDetails from "./pages/UserDetails";
 import EditUser from "./pages/EditUser";
+import MasterData from "./pages/MasterData";
+import Departments from "./pages/Departments";
+import Designations from "./pages/Designations";
+import EmploymentTypes from "./pages/EmploymentTypes";
+import PaymentMethods from "./pages/PaymentMethods";
+import Vehicles from "./pages/Vehicles";
+import CreateVehicle from "./pages/CreateVehicle"
+import EditVehicle from "./pages/EditVehicle";
+import Employees from "./pages/Employees";
+import CreateEmployee from "./pages/CreateEmployee";
+import EditEmployee from "./pages/EditEmployees";
+import ViewEmployee from "./pages/ViewEmployee"
+
+
 
 
 function App() {
@@ -156,7 +169,7 @@ function App() {
           <Route index element={<CreateUser />} />
         </Route>
 
-<Route
+        <Route
           path="/settings/users/:id"
           element={
             <ProtectedRoute>
@@ -178,8 +191,138 @@ function App() {
           <Route index element={<EditUser />} />
         </Route>
 
+        <Route
+          path="/settings/master-data"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<MasterData />} />
+        </Route>
+
+        <Route
+          path="/settings/master-data/departments"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Departments />} />
+        </Route>
+
+        <Route
+          path="/settings/master-data/designations"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Designations />} />
+        </Route>
+
+        <Route
+          path="/settings/master-data/employment-types"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmploymentTypes />} />
+        </Route>
+
+        <Route
+          path="/settings/master-data/payment-methods"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<PaymentMethods />} />
+        </Route>
 
 
+
+
+        <Route
+          path="/settings/master-data/vehicles"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Vehicles />} />
+        </Route>
+
+
+
+<Route
+          path="/settings/master-data/vehicles/create"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CreateVehicle />} />
+        </Route>
+        <Route
+          path="/settings/master-data/vehicles/:id/edit"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EditVehicle />} />
+        </Route>
+
+        <Route
+          path="/employees"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<Employees />} />
+        </Route>
+        <Route
+          path="/employees/create"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<CreateEmployee />} />
+        </Route>
+        <Route
+          path="/employees/:id/edit"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EditEmployee />} />
+        </Route>
+          <Route
+          path="/employees/:id/"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ViewEmployee />} />
+        </Route>
       </Routes>
     </BrowserRouter>
   );

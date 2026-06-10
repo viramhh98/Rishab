@@ -1,13 +1,39 @@
 import api from "./axios";
 
-export const getEmployees = () =>
-  api.get("/employees");
+export const employeeApi = {
+  getAll(params = {}) {
+    return api.get("/employee", {
+      params,
+    });
+  },
 
-export const createEmployee = (data) =>
-  api.post("/employees", data);
+  getById(id) {
+    return api.get(`/employee/${id}`);
+  },
 
-export const updateEmployee = (id, data) =>
-  api.put(`/employees/${id}`, data);
+  create(data) {
+    return api.post("/employee", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
 
-export const deleteEmployee = (id) =>
-  api.delete(`/employees/${id}`);
+  update(id, data) {
+    return api.put(`/employee/${id}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+  },
+
+  delete(id) {
+    return api.delete(`/employee/${id}`);
+  },
+  
+  getMasterData() {
+    return api.get(
+      "/employee/master-data",
+    );
+  }
+};

@@ -5,8 +5,8 @@ import {
   Users,
   Building2,
   UserCog,
+  Database,
 } from "lucide-react";
-
 import {
   Card,
   CardContent,
@@ -40,6 +40,13 @@ const settingsItems = [
       "Manage company records.",
     icon: Building2,
     path: "/settings/companies",
+  },
+  {
+    title: "Master Data",
+    description:
+      "Manage departments, designations, employment types, payment methods and other system master records.",
+    icon: Database,
+    path: "/settings/master-data",
   },
 ];
 

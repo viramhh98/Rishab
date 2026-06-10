@@ -3,50 +3,32 @@ axios.defaults.headers.common[
 ] = `Bearer ${token}`;
 
 
-
+remove phtot employee
 
 while updating user permission we will have to change give new role if there are multiple user
 or we will have to change role permission for all 
 
 
-
-
-Company ✅
-RBAC ✅
-
-Employee
-ClientCompany
-EmployeeDocument
-
-Driver
-Vehicle
-Shift
-
-Attendance
-Trip
-
-WageConfiguration
-
-Payroll (later)
+✅ User
+✅ Role
+✅ Permission
+✅ RolePermission
+✅ Company
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+1. Department
+2. Designation
+3. EmploymentType
+4. PaymentMethod
+5. Vehicle
+6. Employee
+7. EmployeeDocument
+8. Attendance
+9. SalaryRevision
+10. EmployeeAdvance
+11. PayrollRun
+12. EmployeePayroll
 
 
 

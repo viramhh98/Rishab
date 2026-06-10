@@ -1,0 +1,484 @@
+# HRMS Frontend MCP
+
+You are a Senior Frontend Engineer building an Offline-First HRMS & Fleet Management System for a Tours & Travels Company.
+
+## Tech Stack
+
+* React
+* Vite
+* JavaScript
+* Tailwind CSS v4
+* shadcn/ui
+* React Router
+* Axios
+
+## UI Philosophy
+
+Build business software, not marketing websites.
+
+The UI should feel similar to:
+
+* Zoho People
+* Keka
+* GreytHR
+* Razorpay Dashboard
+* Notion Admin Panels
+
+Avoid:
+
+* Fancy animations
+* Glassmorphism
+* Marketing landing page designs
+* Excessive gradients
+* Complex dashboard widgets
+
+Focus on:
+
+* Clarity
+* Speed
+* Maintainability
+* Data-heavy workflows
+* Mobile responsiveness
+
+---
+
+# Project Structure
+
+src/
+
+components/
+├── layout/
+│   ├── Sidebar.jsx
+│   ├── Navbar.jsx
+│
+├── ui/
+│   └── shadcn components
+│
+├── common/
+│
+├── dialogs/
+│
+├── forms/
+│
+└── tables/
+
+pages/
+├── Dashboard.jsx
+│
+├── employees/
+│   ├── Employees.jsx
+│   ├── EmployeeDetails.jsx
+│   ├── CreateEmployee.jsx
+│
+├── attendance/
+│
+├── vehicles/
+│
+├── drivers/
+│
+├── companies/
+│
+├── settings/
+│   ├── Settings.jsx
+│   ├── Permissions.jsx
+│   ├── Roles.jsx
+│   ├── RoleDetails.jsx
+│   └── CreateRole.jsx
+
+api/
+├── auth.api.js
+├── permission.api.js
+├── role.api.js
+
+services/
+├── permission.services.js
+├── role.services.js
+├── token.services.js
+
+lib/
+├── error-handler.js
+
+layouts/
+├── MainLayout.jsx
+
+routes/
+├── ProtectedRoute.jsx
+
+---
+
+# API Layer Pattern
+
+api folder contains raw axios requests.
+
+Example:
+
+permission.api.js
+
+export const getPermissions = () =>
+api.get("/permissions");
+
+service folder contains business logic.
+
+Example:
+
+permission.services.js
+
+export const permissionService = {
+async getAll() {
+const response =
+await permissionApi.getPermissions();
+
+```
+return response.data;
+```
+
+}
+};
+
+Pages must use services.
+
+Never call axios directly from pages.
+
+---
+
+# Error Handling
+
+Create:
+
+lib/error-handler.js
+
+Functions:
+
+* handleApiError(error)
+* handleSuccess(message)
+
+Use Sonner.
+
+Example:
+
+handleSuccess(
+"Role created successfully"
+);
+
+handleApiError(error);
+
+Never use:
+
+alert()
+
+Never use:
+
+console.error() as user feedback.
+
+Console logging is allowed for debugging only.
+
+---
+
+# Layout Rules
+
+All pages:
+
+<div className="space-y-6">
+
+Page header:
+
+<section className="rounded-2xl border bg-card p-8">
+
+Back navigation:
+
+<Button
+variant="outline"
+size="icon"
+
+>
+
+Page title:
+
+<h1 className="text-3xl font-bold">
+
+Page description:
+
+<p className="mt-2 text-muted-foreground">
+
+---
+
+# Cards
+
+Use:
+
+<Card>
+<CardContent>
+
+for all content.
+
+Cards should:
+
+* Have consistent spacing
+* Use p-5 or p-6
+* Support dark mode
+
+Hover cards:
+
+className="transition-all hover:shadow-md"
+
+---
+
+# Forms
+
+Inputs must have labels.
+
+Example:
+
+<label className="mb-2 block text-sm font-medium">
+  Role Name
+</label>
+
+<Input />
+
+Never use unlabeled inputs.
+
+Validation must happen before API call.
+
+Example:
+
+if (!roleName.trim()) {
+return handleApiError(
+"Role name is required"
+);
+}
+
+---
+
+# Dialog Rules
+
+Use:
+
+Dialog
+
+for:
+
+* Create
+* Edit
+
+Use:
+
+AlertDialog
+
+for:
+
+* Delete
+
+Closing a dialog should reset form state.
+
+Example:
+
+onOpenChange={(open) => {
+setCreateOpen(open);
+
+if (!open) {
+resetForm();
+}
+}}
+
+---
+
+# Loading States
+
+Always create:
+
+const [loading, setLoading] =
+useState(false);
+
+const [saving, setSaving] =
+useState(false);
+
+const [deleting, setDeleting] =
+useState(false);
+
+Button example:
+
+<Button disabled={saving}>
+  {saving
+    ? "Saving..."
+    : "Save"}
+</Button>
+
+---
+
+# Empty States
+
+Never show blank screens.
+
+Example:
+
+No records found
+
+or
+
+No permissions match your search
+
+with action button.
+
+---
+
+# Permission Module
+
+Permission format:
+
+company:create
+company:read
+company:update
+company:delete
+
+UI representation:
+
+Company
+
+* create
+* read
+* update
+* delete
+
+Group permissions by category.
+
+Display category as card.
+
+Display actions inside card.
+
+Show:
+
+Edit
+Delete
+
+for each permission.
+
+Create Permission:
+
+Category:
+company
+
+Type:
+create
+
+Backend payload:
+
+{
+"name": "company:create"
+}
+
+---
+
+# Role Module
+
+Roles page:
+
+Display roles as cards.
+
+Card click:
+
+navigate(
+`/settings/roles/${role.id}`
+)
+
+Create Role page:
+
+1. Create role
+2. Assign permissions
+
+Backend:
+
+POST /roles
+
+{
+"name": "manager"
+}
+
+Then:
+
+POST /roles/assign-permissions
+
+{
+"roleId": 1,
+"permissionIds": [1,2,3]
+}
+
+Role Details page:
+
+Show all permissions grouped by category.
+
+Use checkboxes.
+
+Allow updating assigned permissions.
+
+Save button:
+
+PUT /roles/:id/update-permissions
+
+{
+"permissionIds": [...]
+}
+
+---
+
+# Navigation Rules
+
+Settings Page:
+
+Cards:
+
+* Role Management
+* Permission Management
+* User Management
+* Company Settings
+* Attendance Settings
+
+Click card → navigate to module page.
+
+Cards should be large and descriptive.
+
+---
+
+# Styling Rules
+
+Use only:
+
+* Tailwind CSS
+* shadcn/ui
+
+Never use inline styles.
+
+Prefer:
+
+rounded-2xl
+border
+bg-card
+text-muted-foreground
+
+Spacing:
+
+space-y-6
+
+Cards:
+
+p-5
+p-6
+
+---
+
+# Code Generation Rules
+
+Whenever generating a page:
+
+1. Full page component
+2. Proper imports
+3. Error handling
+4. Loading state
+5. Empty state
+6. Success toast
+7. Validation
+8. API integration through service layer
+9. Responsive layout
+10. Production-ready code
+
+Do not generate placeholder architecture.
+Generate code matching this exact project structure and UI style. remember this 

@@ -24,3 +24,18 @@ npx prisma studio
 
 
 npx prisma migrate dev --name add-company-table
+
+
+
+
+
+
+
+after change is prima model 
+del node module 
+install it again
+npm install
+npx prisma generate
+npx prisma migrate dev --name init
+
+
