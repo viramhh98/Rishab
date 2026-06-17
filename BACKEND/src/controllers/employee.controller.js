@@ -123,6 +123,44 @@ export const createEmployee = async (req, res) => {
       },
     });
 
+    await prisma.salaryRevision.create({
+      data: {
+        employeeId: employee.id,
+
+        previousSalary: 0,
+
+        revisedSalary:
+          Number(req.body.currentSalary) || Number(req.body.joiningSalary) || 0,
+
+        basicSalary: req.body.basicSalary ? Number(req.body.basicSalary) : null,
+
+        hra: req.body.hra ? Number(req.body.hra) : null,
+
+        da: req.body.da ? Number(req.body.da) : null,
+
+        pfEnabled: req.body.pfEnabled === "true",
+
+        pfPercentage: req.body.pfPercentage
+          ? Number(req.body.pfPercentage)
+          : 12,
+
+        pfSalaryLimit: req.body.pfSalaryLimit
+          ? Number(req.body.pfSalaryLimit)
+          : 15000,
+
+        ptApplicable: req.body.ptApplicable !== "false",
+
+        ptAmount: req.body.ptAmount ? Number(req.body.ptAmount) : 200,
+
+        esicApplicable: req.body.esicApplicable === "true",
+
+        effectiveFrom: new Date(req.body.joiningDate),
+
+        revisionReason: "Initial Salary",
+
+        remarks: "Automatically created during employee creation",
+      },
+    });
     return res.status(201).json({
       success: true,
       data: updatedEmployee,
@@ -160,65 +198,65 @@ export const getEmployees = async (req, res) => {
       isActive: true,
     };
     if (search) {
-  where.OR = [
-    {
-      firstName: {
-        contains: search,
-      },
-    },
-    {
-      lastName: {
-        contains: search,
-      },
-    },
-    {
-      employeeCode: {
-        contains: search,
-      },
-    },
-    {
-      phone: {
-        contains: search,
-      },
-    },
-    {
-      company: {
-        is: {
-          companyName: {
+      where.OR = [
+        {
+          firstName: {
             contains: search,
           },
         },
-      },
-    },
-    {
-      department: {
-        is: {
-          name: {
+        {
+          lastName: {
             contains: search,
           },
         },
-      },
-    },
-    {
-      designation: {
-        is: {
-          name: {
+        {
+          employeeCode: {
             contains: search,
           },
         },
-      },
-    },
-    {
-      employmentType: {
-        is: {
-          name: {
+        {
+          phone: {
             contains: search,
           },
         },
-      },
-    },
-  ];
-}
+        {
+          company: {
+            is: {
+              companyName: {
+                contains: search,
+              },
+            },
+          },
+        },
+        {
+          department: {
+            is: {
+              name: {
+                contains: search,
+              },
+            },
+          },
+        },
+        {
+          designation: {
+            is: {
+              name: {
+                contains: search,
+              },
+            },
+          },
+        },
+        {
+          employmentType: {
+            is: {
+              name: {
+                contains: search,
+              },
+            },
+          },
+        },
+      ];
+    }
 
     if (companyId) {
       where.companyId = Number(companyId);
@@ -620,58 +658,50 @@ export const deleteEmployee = async (req, res) => {
   }
 };
 
-
-export const getEmployeeMasterData = async (
-  req,
-  res,
-) => {
+export const getEmployeeMasterData = async (req, res) => {
   try {
-    const [
-      companies,
-      departments,
-      designations,
-      employmentTypes,
-    ] = await Promise.all([
-      prisma.company.findMany({
-        orderBy: {
-          companyName: "asc",
-        },
-        select: {
-          id: true,
-          companyName: true,
-        },
-      }),
+    const [companies, departments, designations, employmentTypes] =
+      await Promise.all([
+        prisma.company.findMany({
+          orderBy: {
+            companyName: "asc",
+          },
+          select: {
+            id: true,
+            companyName: true,
+          },
+        }),
 
-      prisma.department.findMany({
-        orderBy: {
-          name: "asc",
-        },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
+        prisma.department.findMany({
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        }),
 
-      prisma.designation.findMany({
-        orderBy: {
-          name: "asc",
-        },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
+        prisma.designation.findMany({
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        }),
 
-      prisma.employmentType.findMany({
-        orderBy: {
-          name: "asc",
-        },
-        select: {
-          id: true,
-          name: true,
-        },
-      }),
-    ]);
+        prisma.employmentType.findMany({
+          orderBy: {
+            name: "asc",
+          },
+          select: {
+            id: true,
+            name: true,
+          },
+        }),
+      ]);
 
     return res.status(200).json({
       success: true,

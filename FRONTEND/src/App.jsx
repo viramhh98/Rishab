@@ -29,7 +29,12 @@ import Employees from "./pages/Employees";
 import CreateEmployee from "./pages/CreateEmployee";
 import EditEmployee from "./pages/EditEmployees";
 import ViewEmployee from "./pages/ViewEmployee";
-import EmployeeDocuments  from "./pages/EmployeeDocuments"
+import EmployeeDocuments from "./pages/EmployeeDocuments";
+import BulkAttendance from "./pages/BulkAttendance";
+import SalaryRevisionListPage from "./pages/SalaryRevisionListPage";
+import SalaryRevisionCreatePage from "./pages/SalaryRevisionCreatePage";
+import SalaryRevisionDetailPage from "./pages/SalaryRevisionDetailPage";
+
 function App() {
   return (
     <BrowserRouter>
@@ -323,7 +328,51 @@ function App() {
             </ProtectedRoute>
           }
         >
-          <Route index element={<EmployeeDocuments  />} />
+          <Route index element={<EmployeeDocuments />} />
+        </Route>
+
+        <Route
+          path="/attendance"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<BulkAttendance />} />
+        </Route>
+
+        <Route
+          path="/salary-revision/:employeeId"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<SalaryRevisionListPage />} />
+        </Route>
+
+        <Route
+          path="/salary-revision/create/:employeeId"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<SalaryRevisionCreatePage />} />
+        </Route>
+
+        <Route
+          path="/salary-revision/detail/:id"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<SalaryRevisionDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

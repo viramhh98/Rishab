@@ -1,259 +1,62 @@
-6. Employee
+
+model SalaryRevision {
+  id Int @id @default(autoincrement())
+
+  employeeId Int
+  employee   Employee @relation(fields: [employeeId], references: [id])
+
+  previousSalary Float
+  revisedSalary  Float
+
+  basicSalary Float?
+  hra         Float?
+  da          Float?
+
+  pfEnabled     Boolean @default(false)
+  pfPercentage  Float?  @default(12)
+  pfSalaryLimit Float?  @default(15000)
+
+  ptApplicable Boolean @default(true)
+  ptAmount     Float?  @default(200)
+
+  esicApplicable Boolean @default(false)
+
+  effectiveFrom DateTime
+
+  revisionReason String?
+  remarks        String?
+
+  updatedById Int?
+
+  updatedBy User? @relation("SalaryRevisionUpdatedBy", fields: [updatedById], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([employeeId, effectiveFrom])
+}
 
 
-7. EmployeeDocument
-8. Attendance
-9. SalaryRevision
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 10. EmployeeAdvance
 11. PayrollRun
 12. EmployeePayroll
 
-
-
-=========================================
-PHASE 1 - MASTER TABLES
-=========================================
-
-1. DEPARTMENT
-
-POST   /department
-GET    /department
-GET    /department/:id
-PUT    /department/:id
-DELETE /department/:id
-
-Test Case:
-
-POST /department
-
-{
-  "name": "Operations"
-}
-
-Expected:
-Department Created
-
-
------------------------------------------
-
-2. DESIGNATION
-
-POST   /designation
-GET    /designation
-GET    /designation/:id
-PUT    /designation/:id
-DELETE /designation/:id
-
-Test Case:
-
-POST /designation
-
-{
-  "name": "Driver"
-}
-
-Expected:
-Designation Created
-
-
------------------------------------------
-
-3. EMPLOYMENT TYPE
-
-POST   /employment-type
-GET    /employment-type
-GET    /employment-type/:id
-PUT    /employment-type/:id
-DELETE /employment-type/:id
-
-Test Case:
-
-POST /employment-type
-
-{
-  "name": "Permanent"
-}
-
-Expected:
-Employment Type Created
-
-
------------------------------------------
-
-4. PAYMENT METHOD
-
-POST   /payment-method
-GET    /payment-method
-GET    /payment-method/:id
-PUT    /payment-method/:id
-DELETE /payment-method/:id
-
-Test Case:
-
-POST /payment-method
-
-{
-  "name": "Cash"
-}
-
-Expected:
-Payment Method Created
-
-
------------------------------------------
-
-5. VEHICLE
-
-POST   /vehicle
-GET    /vehicle
-GET    /vehicle/:id
-PUT    /vehicle/:id
-DELETE /vehicle/:id
-
-Test Case:
-
-POST /vehicle
-
-{
-  "vehicleNumber": "GJ01AB1234",
-  "vehicleName": "Bus 1",
-  "vehicleType": "Bus",
-  "registrationNo": "REG123",
-  "seatingCapacity": 45
-}
-
-Expected:
-Vehicle Created
-
-
-=========================================
-PHASE 2 - EMPLOYEE
-=========================================
-
-6. EMPLOYEE
-
-POST   /employee
-GET    /employee
-GET    /employee/:id
-PUT    /employee/:id
-PATCH  /employee/:id/status
-DELETE /employee/:id
-
-Test Case:
-
-POST /employee
-
-{
-  "employeeCode": "EMP001",
-  "firstName": "Rahul",
-  "lastName": "Patel",
-  "phone": "9876543210",
-  "companyId": 1,
-  "departmentId": 1,
-  "designationId": 1,
-  "employmentTypeId": 1,
-  "joiningSalary": 25000,
-  "currentSalary": 25000,
-  "basicSalary": 15000,
-  "hra": 7500,
-  "da": 2500
-}
-
-Expected:
-Employee Created
-
-
-=========================================
-PHASE 3 - EMPLOYEE DOCUMENTS
-=========================================
-
-7. EMPLOYEE DOCUMENT
-
-POST   /employee-document/upload
-GET    /employee-document/:employeeId
-DELETE /employee-document/:id
-
-Test Case:
-
-POST /employee-document/upload
-
-FormData
-
-employeeId = 1
-documentType = PAN_CARD
-file = pan.pdf
-
-Expected:
-Document Uploaded
-
-
-=========================================
-PHASE 4 - ATTENDANCE
-=========================================
-
-8. ATTENDANCE
-
-POST   /attendance
-POST   /attendance/bulk
-
-GET    /attendance
-GET    /attendance/:id
-
-GET    /attendance/employee/:employeeId
-
-GET    /attendance/monthly/:employeeId
-
-PUT    /attendance/:id
-
-DELETE /attendance/:id
-
-Test Case:
-
-POST /attendance
-
-{
-  "employeeId": 1,
-  "vehicleId": 1,
-  "date": "2026-06-10",
-  "status": "PRESENT",
-  "overtimeHours": 2
-}
-
-Expected:
-Attendance Created
-
-
-=========================================
-PHASE 5 - SALARY REVISION
-=========================================
-
-9. SALARY REVISION
-
-POST   /salary-revision
-
-GET    /salary-revision/:employeeId
-
-GET    /salary-revision/detail/:id
-
-Test Case:
-
-POST /salary-revision
-
-{
-  "employeeId": 1,
-  "previousSalary": 25000,
-  "revisedSalary": 30000,
-  "basicSalary": 18000,
-  "hra": 9000,
-  "da": 3000,
-  "effectiveFrom": "2026-07-01",
-  "revisionReason": "Promotion"
-}
-
-Expected:
-
-1 SalaryRevision Record Created
-2 Employee.currentSalary Updated
 
 
 =========================================
@@ -347,24 +150,3 @@ Expected:
   "netSalary": 23000
 }
 
-
-=========================================
-BUILD ORDER
-=========================================
-
-1. Department
-2. Designation
-3. EmploymentType
-4. PaymentMethod
-5. Vehicle
-
-
-6. Employee
-7. EmployeeDocument
-
-
-8. Attendance
-9. SalaryRevision
-10. EmployeeAdvance
-11. PayrollRun
-12. EmployeePayroll

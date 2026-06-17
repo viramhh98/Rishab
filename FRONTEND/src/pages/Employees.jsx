@@ -233,6 +233,7 @@ export default function Employees() {
 
                   <TableHead>Phone</TableHead>
 
+                  <TableHead> Upload Documents</TableHead>
 
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -284,17 +285,21 @@ export default function Employees() {
 
                     <TableCell>{employee.phone || "-"}</TableCell>
 
-                
                     <TableCell>
-                      <div className="flex justify-end gap-2">
+                      {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => navigate(`/employees/${employee.id}/documents`)}
+                          onClick={() =>
+                            navigate(`/employees/${employee.id}/documents`)
+                          }
                         >
                           Upload Documents
                         </Button>
-                        
+                      }
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex justify-end gap-2">
                         <Button
                           size="sm"
                           variant="outline"

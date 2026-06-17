@@ -13,6 +13,8 @@ import paymentMethodRoutes from "./routes/paymentMethod.routes.js";
 import vehicleRoutes from "./routes/vehicle.routes.js";
 import employeesRoutes from "./routes/employee.routes.js";
 import employeeDocumentRoutes from "./routes/employeeDocument.routes.js";
+import attendanceRoute from "./routes/attendance.routes.js";
+import salaryRevisionRoutes from "./routes/salaryRevision.routes.js"
 import path from "path";
 
 // Create an Express application
@@ -39,8 +41,8 @@ app.use("/employment-type", employmentTypeRoutes);
 app.use("/payment-method", paymentMethodRoutes);
 app.use("/vehicle", vehicleRoutes);
 app.use("/employee", employeesRoutes);
-
-
+app.use("/attendance",attendanceRoute)
+app.use("/salary-revision",salaryRevisionRoutes)
 app.use("/employee-document", employeeDocumentRoutes);
 app.use("/uploads", express.static(path.join(process.cwd(), UPLOAD_PATH)));
 
