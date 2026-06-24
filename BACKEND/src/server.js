@@ -15,6 +15,7 @@ import employeesRoutes from "./routes/employee.routes.js";
 import employeeDocumentRoutes from "./routes/employeeDocument.routes.js";
 import attendanceRoute from "./routes/attendance.routes.js";
 import salaryRevisionRoutes from "./routes/salaryRevision.routes.js"
+import employeeAdvanceRoutes from "./routes/employeeAdvance.routes.js"
 import path from "path";
 
 // Create an Express application
@@ -44,6 +45,7 @@ app.use("/employee", employeesRoutes);
 app.use("/attendance",attendanceRoute)
 app.use("/salary-revision",salaryRevisionRoutes)
 app.use("/employee-document", employeeDocumentRoutes);
+app.use("/employee-advances", employeeAdvanceRoutes);
 app.use("/uploads", express.static(path.join(process.cwd(), UPLOAD_PATH)));
 
 // Start the server

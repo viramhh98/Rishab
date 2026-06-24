@@ -169,9 +169,21 @@ export const getSalaryRevisionsByEmployee = async (req, res) => {
       },
     });
 
+    const employee = await prisma.employee.findUnique({
+      where: {
+        id: employeeId,
+      },
+      select: {
+        employeeCode: true,
+        firstName: true,
+        lastName: true,
+        phone: true,
+        profilePhoto:true,
+      },
+    });
     return res.status(200).json({
       success: true,
-      data: salaryRevisions,
+      data: {salaryRevisions,employee},
     });
   } catch (error) {
     console.error(error);

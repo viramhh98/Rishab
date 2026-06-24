@@ -234,6 +234,7 @@ export default function Employees() {
                   <TableHead>Phone</TableHead>
 
                   <TableHead> Upload Documents</TableHead>
+                  <TableHead> Revise Salary</TableHead>
 
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
@@ -247,20 +248,6 @@ export default function Employees() {
                   >
                     <TableCell>
                       <div className="flex items-center gap-3">
-                        {employee.profilePhoto ? (
-                          <img
-                            src={imageService.getImageUrl(
-                              employee.profilePhoto,
-                            )}
-                            alt={employee.firstName}
-                            className="h-10 w-10 rounded-full border object-cover"
-                          />
-                        ) : (
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full border bg-muted text-sm font-semibold">
-                            {employee.firstName?.charAt(0)}
-                          </div>
-                        )}
-
                         <div>
                           <p className="font-medium">
                             {employee.firstName} {employee.lastName}
@@ -295,6 +282,19 @@ export default function Employees() {
                           }
                         >
                           Upload Documents
+                        </Button>
+                      }
+                    </TableCell>
+                     <TableCell>
+                      {
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            navigate(`/salary-revision/${employee.id}`)
+                          }
+                        >
+                          Revise-salary
                         </Button>
                       }
                     </TableCell>

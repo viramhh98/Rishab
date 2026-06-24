@@ -41,7 +41,6 @@ enum DocumentType {
   BANK_PASSBOOK
   PHOTO
   OTHER
-  
 }
 
 model Department {
@@ -202,11 +201,10 @@ model Attendance {
   vehicleId Int?
   vehicle   Vehicle? @relation(fields: [vehicleId], references: [id])
 
-  
   date DateTime
 
   status AttendanceStatus
- 
+
   overtimeHours Float? @default(0)
 
   overtimeRemarks String?
@@ -253,10 +251,13 @@ model SalaryRevision {
 
   updatedBy User? @relation("SalaryRevisionUpdatedBy", fields: [updatedById], references: [id])
 
+  payrolls EmployeePayroll[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([employeeId, effectiveFrom])
+  @@index([employeeId, effectiveFrom])
 }
 
 model EmployeeAdvance {
@@ -294,6 +295,8 @@ model EmployeeAdvance {
   updatedAt DateTime @updatedAt
 
   @@index([employeeId, deductionStatus])
+  @@index([deductionStatus])
+  @@index([deductionMonth, deductionYear])
 }
 
 model PayrollRun {
@@ -309,41 +312,74 @@ model PayrollRun {
 
   processedAt DateTime?
 
+  finalizedAt DateTime?
+
+  finalizedById Int?
+
+  finalizedBy User? @relation("PayrollRunFinalizedBy", fields: [finalizedById], references: [id])
+
   payrolls EmployeePayroll[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@unique([companyId, month, year])
+  @@index([companyId])
+  @@index([status])
 }
 
 model EmployeePayroll {
   id Int @id @default(autoincrement())
 
   payrollRunId Int
-  payrollRun   PayrollRun @relation(fields: [payrollRunId], references: [id])
+  payrollRun   PayrollRun @relation(fields: [payrollRunId], references: [id], onDelete: Cascade)
 
   employeeId Int
   employee   Employee @relation(fields: [employeeId], references: [id])
 
+  salaryRevisionId Int?
+  salaryRevision   SalaryRevision? @relation(fields: [salaryRevisionId], references: [id])
+
+  // Attendance Snapshot
   workingDays Int
+
   presentDays Float
 
-  overtimeHours Float
+  absentDays Float @default(0)
 
+  leaveDays Float @default(0)
+
+  holidayDays Float @default(0)
+
+  overtimeHours Float @default(0)
+
+  // Salary Snapshot
   basicSalary Float
-  hra         Float
-  da          Float
+
+  hra Float
+
+  da Float
 
   grossSalary Float
 
-  pfAmount   Float
-  ptAmount   Float
-  esicAmount Float
+  // Deductions
+  pfAmount Float @default(0)
 
-  advanceDeduction Float
+  ptAmount Float @default(0)
+
+  esicAmount Float @default(0)
+
+  advanceDeduction Float @default(0)
+
+  totalDeductions Float
+
+  // Final Salary
+  totalEarnings Float
 
   netSalary Float
+
+  // Payslip
+  salarySlipPath String?
 
   paidDate DateTime?
 
@@ -353,6 +389,8 @@ model EmployeePayroll {
   updatedAt DateTime @updatedAt
 
   @@unique([payrollRunId, employeeId])
+  @@index([employeeId])
+  @@index([payrollRunId])
 }
 
 model Company {
@@ -395,6 +433,8 @@ model User {
   salaryRevisionsUpdated SalaryRevision[] @relation("SalaryRevisionUpdatedBy")
 
   advancesGiven EmployeeAdvance[] @relation("AdvanceGivenBy")
+
+  payrollRunsFinalized PayrollRun[] @relation("PayrollRunFinalizedBy")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -35,6 +35,10 @@ import SalaryRevisionListPage from "./pages/SalaryRevisionListPage";
 import SalaryRevisionCreatePage from "./pages/SalaryRevisionCreatePage";
 import SalaryRevisionDetailPage from "./pages/SalaryRevisionDetailPage";
 
+import EmployeeAdvanceListPage from "./pages/EmployeeAdvanceListPage";
+import EmployeeAdvanceCreatePage from "./pages/EmployeeAdvanceCreatePage";
+import EmployeeAdvanceDetailPage from "./pages/EmployeeAdvanceForm";
+import EmployeeAdvanceEditPage from "./pages/EmployeeAdvanceEditPage"
 function App() {
   return (
     <BrowserRouter>
@@ -373,6 +377,53 @@ function App() {
           }
         >
           <Route index element={<SalaryRevisionDetailPage />} />
+        </Route>
+
+        <Route
+          path="/employee-advances"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmployeeAdvanceListPage />} />
+        </Route>
+
+
+          <Route
+          path="/employee-advances/create"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmployeeAdvanceCreatePage />} />
+        </Route>
+
+
+          <Route
+          path="/employee-advances/edit/:id"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmployeeAdvanceEditPage />} />
+        </Route>
+
+
+          <Route
+          path="/employee-advances/:id"
+          element={
+            <ProtectedRoute>
+              <MainLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<EmployeeAdvanceDetailPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

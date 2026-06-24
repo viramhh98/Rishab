@@ -26,20 +26,21 @@ const menuItems = [
     path: "/attendance",
   },
   {
+    name: "Advance Payments",
+    icon: IndianRupee,
+    path: "/employee-advances",
+  },
+  {
     name: "Payroll",
     icon: IndianRupee,
     path: "/payroll",
-  },
-  {
-    name: "Fleet",
-    icon: Truck,
-    path: "/fleet",
   },
   {
     name: "Settings",
     icon: Settings,
     path: "/settings",
   },
+  
 ];
 
 export default function Sidebar() {
